@@ -1,0 +1,327 @@
+{
+  "name": "shopify order details",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "b2b1cc49-1f78-4d47-9a20-7638a2718a4d",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "",
+      "name": "Webhook",
+      "webhookId": ""
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "",
+          "mode": "list",
+          "cachedResultName": "shopify orders",
+          "cachedResultUrl": ""
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": ,
+          "mode": "list",
+          "cachedResultName": "UserDetails",
+          "cachedResultUrl": ""
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "orderID": "={{ $json.order_id }}",
+            "name": "={{ $json.customer.name }}",
+            "email ": "={{ $json.customer.email }}",
+            "address": "={{ $json.customer.address }}"
+          },
+          "matchingColumns": [
+            "orderID"
+          ],
+          "schema": [
+            {
+              "id": "orderID",
+              "displayName": "orderID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "email ",
+              "displayName": "email ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "address",
+              "displayName": "address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        220,
+        0
+      ],
+      "id": "",
+      "name": "Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "",
+          "mode": "list",
+          "cachedResultName": "shopify orders",
+          "cachedResultUrl": ""
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "OrderDetails",
+          "cachedResultUrl": ""
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "orderID": "={{ $('Webhook').item.json.order_id }}",
+            "productID": "={{ $('Webhook').item.json.items.map(product=>product.product_id) }}",
+            "quantity": "={{ $('Webhook').item.json.items.map(product=>product.quantity) }}",
+            "name": "={{ $('Webhook').item.json.items.map(product=>product.name) }}",
+            "price": "={{ $('Webhook').item.json.items.map(product=>product.price) }}"
+          },
+          "matchingColumns": [
+            "orderID"
+          ],
+          "schema": [
+            {
+              "id": "orderID",
+              "displayName": "orderID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "productID",
+              "displayName": "productID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "quantity",
+              "displayName": "quantity",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "price",
+              "displayName": "price",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        440,
+        0
+      ],
+      "id": "e97310c2-4704-47f2-b48b-cd9efdf3c7c5",
+      "name": "Google Sheets1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Google Sheets').item.json['email '] }}",
+        "subject": "Summary of Bill",
+        "message": "=<tbody>\n  {{ $json.itemsHtml }}\n</tbody>\nTotal amount payable: ${{ $('Webhook').item.json.total_price }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        900,
+        0
+      ],
+      "id": "",
+      "name": "Gmail",
+      "webhookId": "",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const names = $json.name || [];\nconst prices = $json.price || [];\nconst quantities = $json.quantity || [];\n\nlet itemsHtml = '';\n\nfor (let i = 0; i < names.length; i++) {\n  itemsHtml += `\n    <tr>\n      <td>${names[i]}</td>\n      <td>${quantities[i]}</td>\n      <td>$${prices[i].toFixed(2)}</td>\n    </tr>\n  `;\n}\n\n// Return a single object\nreturn {\n  json: {\n    ...$json,\n    itemsHtml\n  }\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        660,
+        0
+      ],
+      "id": "",
+      "name": "Code"
+    }
+  ],
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "order_id": "12345",
+          "customer": {
+            "name": "John Doe",
+            "email": "anshikasinha@gmail.com",
+            "address": "123 Elm Street, Springfield"
+          },
+          "items": [
+            {
+              "product_id": "101",
+              "name": "Jacket",
+              "quantity": 1,
+              "price": 59.99
+            },
+            {
+              "product_id": "202",
+              "name": "T-Shirt",
+              "quantity": 2,
+              "price": 19.99
+            }
+          ],
+          "total_price": 99.97
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets1": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Gmail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": ""
+  },
+  "id": "",
+  "tags": []
+}
