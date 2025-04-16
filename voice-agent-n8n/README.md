@@ -8,9 +8,8 @@ This project is a fully automated voice agent built using n8n, Twilio, and a fre
 - [OpenRouter API] 
 
 📁 Files
-- `workflow.json` - Import this into n8n to recreate the workflow.
-- `architecture.png` - A visual of how the system works.
-- `example-call.mp4` - Sample demo of the agent in action.
+- `voice-agent.json` - Import this into n8n to recreate the workflow.
+- `workflow.png` - A visual of how the system works.
 
 🧠 How It Works
 1. User calls the Twilio number.
