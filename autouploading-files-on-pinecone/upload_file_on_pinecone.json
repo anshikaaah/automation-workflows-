@@ -9,7 +9,7 @@
         -420,
         -20
       ],
-      "id": "ea2b18f1-4dc2-423d-8a7a-c2ee0e53b0db",
+      "id": "",
       "name": "When clicking ‘Test workflow’"
     },
     {
@@ -17,24 +17,24 @@
         "operation": "download",
         "fileId": {
           "__rl": true,
-          "value": "12tSnyL2LUXl3MOOGDDnuMJCLJF5eJwdW",
+          "value": "",
           "mode": "list",
-          "cachedResultName": "xEdJlGQAUoB6tJqpM6Xy.pdf",
-          "cachedResultUrl": "https://drive.google.com/file/d/12tSnyL2LUXl3MOOGDDnuMJCLJF5eJwdW/view?usp=drivesdk"
+          "cachedResultName": "",
+          "cachedResultUrl": ""
         },
         "options": {}
       },
-      "type": "n8n-nodes-base.googleDrive",
+      "type": "",
       "typeVersion": 3,
       "position": [
         -200,
         -20
       ],
-      "id": "c2fec181-63a9-4642-ae11-d6a23420370b",
+      "id": "",
       "name": "Google Drive",
       "credentials": {
         "googleDriveOAuth2Api": {
-          "id": "9gcNIEE5K6tWjmyY",
+          "id": "",
           "name": "Google Drive account"
         }
       }
@@ -44,9 +44,9 @@
         "mode": "insert",
         "pineconeIndex": {
           "__rl": true,
-          "value": "aww",
+          "value": "",
           "mode": "list",
-          "cachedResultName": "aww"
+          "cachedResultName": ""
         },
         "options": {
           "pineconeNamespace": "Nike"
@@ -58,11 +58,11 @@
         20,
         -20
       ],
-      "id": "fc87b84e-8338-42dd-9ef9-a967a65ee6d0",
+      "id": "",
       "name": "Pinecone Vector Store",
       "credentials": {
         "pineconeApi": {
-          "id": "AjM2yspgFrlkSqAh",
+          "id": "",
           "name": "PineconeApi account"
         }
       }
@@ -78,7 +78,7 @@
         200,
         200
       ],
-      "id": "60dcfa7d-9ed0-406d-9cc0-ba1318d55067",
+      "id": "",
       "name": "Default Data Loader"
     },
     {
@@ -91,7 +91,7 @@
         280,
         340
       ],
-      "id": "20d84856-037e-4361-bb95-a6d897b41a3c",
+      "id": "",
       "name": "Recursive Character Text Splitter"
     },
     {
@@ -104,11 +104,11 @@
         80,
         200
       ],
-      "id": "2698b448-81dc-49b9-8263-bfade4e3a1ab",
+      "id": "",
       "name": "Embeddings Cohere",
       "credentials": {
         "cohereApi": {
-          "id": "wBgppm5YsRLwHWRh",
+          "id": "",
           "name": "CohereApi account"
         }
       }
@@ -176,11 +176,11 @@
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "9103fc60-b4b1-4b0c-9826-292416a6c6ff",
+  "versionId": "",
   "meta": {
     "templateCredsSetupCompleted": true,
-    "instanceId": "56f05d3e8f84e6e5d4936bb39689e714f44b60ce3225093569d70ec68d661356"
+    "instanceId": ""
   },
-  "id": "ZfMjXi2UpM8e4S5r",
+  "id": "",
   "tags": []
 }
