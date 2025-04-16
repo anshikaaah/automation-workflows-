@@ -13,8 +13,8 @@ This workflow automates the process of uploading files (like PDFs, text, or docu
 ---
 
 📁 Files
-- `workflow.json` — ready-to-import n8n workflow
-- `architecture.png` — visual diagram of how the workflow works
+- `upload_file_on_pinecone.json` — ready-to-import n8n workflow
+- `image.png` — visual diagram of how the workflow works
 - `nike-earnings.pdf` — example file used in testing
 
 ---
@@ -48,7 +48,7 @@ This workflow automates the process of uploading files (like PDFs, text, or docu
 
 📸 Visual Flow
 
-![Workflow Overview](architecture.png)
+![Workflow Overview](image.png)
 
 ---
 
