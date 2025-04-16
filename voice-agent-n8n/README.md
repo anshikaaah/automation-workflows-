@@ -18,7 +18,7 @@ This project is a fully automated voice agent built using n8n, Twilio, and a fre
 4. The audio is sent back to the caller.
 
 📸 Screenshots
-![Workflow Screenshot](screenshot.png)
+![Workflow Screenshot](workflow.png)
 
 💡 What I Learned
 - Real-time audio processing
