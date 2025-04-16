@@ -18,7 +18,7 @@ This n8n workflow automates the process of receiving Shopify order details via w
 
  📸 Workflow Diagram
 
-image.png
+shopify-order-details-n8n/image.png
 
 ---
 
