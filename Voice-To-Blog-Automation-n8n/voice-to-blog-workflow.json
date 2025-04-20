@@ -1,0 +1,304 @@
+{
+  "name": "BlogAutomation",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {
+          "download": false
+        }
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -400,
+        20
+      ],
+      "id": "37ade5f2-cfcf-4e15-b94b-4f4d9d0a1fd4",
+      "name": "Telegram Trigger",
+      "webhookId": "32136ed4-ad9f-40c2-a34b-083902868689",
+      "credentials": {
+        "telegramApi": {
+          "id": "",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "1e1fc471-2fb4-4c0b-838a-72c2501111b9",
+              "leftValue": "={{ $json.message.voice }}",
+              "rightValue": "",
+              "operator": {
+                "type": "object",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -220,
+        20
+      ],
+      "id": "f7ce6ff7-f506-442c-a960-c1030353aee8",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "fileId": "={{ $json.message.voice.file_id }}"
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "bc311f2a-60a4-4b53-8798-c8d65d1303f4",
+      "name": "Telegram",
+      "webhookId": "ebce9263-9c0b-4109-92da-6b9a000769b6",
+      "credentials": {
+        "telegramApi": {
+          "id": "bbc4zv3R19ix9btY",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.file_url }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file",
+              "outputPropertyName": "voiceNote"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -200,
+        240
+      ],
+      "id": "003779f1-ecd4-4e8f-b8fd-79ac82f720ec",
+      "name": "Request to download file"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.deepgram.com/v1/listen",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Token <ID>"
+            },
+            {
+              "name": "Content-Type",
+              "value": "audio/ogg"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "binaryData",
+        "inputDataFieldName": "voiceNote",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -20,
+        240
+      ],
+      "id": "fdb1bb0e-ade0-43b5-802a-151ae8321f68",
+      "name": "Send to DeepGram"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "49831292-b50e-4018-833c-b2985f3e417c",
+              "name": "file_url",
+              "value": "={{'https://api.telegram.org/file/bot<Your Bot ID>/' + $json.result.file_path}}\n\n\n\n",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        160,
+        0
+      ],
+      "id": "4d745bbb-bcbd-4c63-b45b-cca2a41e53e9",
+      "name": "File URL"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "={{ $json.choices[0].message.content }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        320,
+        240
+      ],
+      "id": "f3f5ea66-bc98-4fac-b1d0-9ae0753176d6",
+      "name": "Telegram Written Blogger",
+      "webhookId": "3f64fda1-e824-4499-89d2-d8687b457182",
+      "credentials": {
+        "telegramApi": {
+          "id": "bbc4zv3R19ix9btY",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://openrouter.ai/api/v1/chat/completions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer <API Key>"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"deepseek/deepseek-v3-base:free\",\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"You are a professional copywriter helping to rewrite transcripts into engaging LinkedIn blog posts. Make them clear, insightful, and social-media ready with relevant hashtags at the end.\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \"Refine the following transcript into a LinkedIn blog post format. Make it engaging and well-written, add relevant hashtags at the end:\\n\\n{{ $json.results.channels[0].alternatives[0].transcript }}\"\n    }\n  ]\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        140,
+        240
+      ],
+      "id": "8bbe823a-3e86-46b4-a519-780ff014a899",
+      "name": "Redefine Text"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram": {
+      "main": [
+        [
+          {
+            "node": "File URL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Request to download file": {
+      "main": [
+        [
+          {
+            "node": "Send to DeepGram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send to DeepGram": {
+      "main": [
+        [
+          {
+            "node": "Redefine Text",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "File URL": {
+      "main": [
+        [
+          {
+            "node": "Request to download file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Redefine Text": {
+      "main": [
+        [
+          {
+            "node": "Telegram Written Blogger",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "b41a791b-7c36-4c3f-b481-9282ab86c49a",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "56f05d3e8f84e6e5d4936bb39689e714f44b60ce3225093569d70ec68d661356"
+  },
+  "id": "gr90x7fvNxipbL1p",
+  "tags": []
+}
