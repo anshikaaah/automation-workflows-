@@ -8,7 +8,7 @@
 - Telegram Trigger (voice)
 - File Download
 - Transcription
-- HuggingFace call with formatting prompt
+- OpenRouter API call with formatting prompt
 - Send back cleaned blog text to Telegram
 
 ...
